@@ -16,7 +16,10 @@ const RenderTable = ({ columns, data }) => {
         {headerGroups.map((headerGroup) => (
           <Tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
-              <Th {...column.getHeaderProps(column.getSortByToggleProps())}>
+              <Th
+                width={column.width}
+                {...column.getHeaderProps(column.getSortByToggleProps())}
+              >
                 {column.render("Header")}
                 <chakra.span pl="4">
                   {column.isSorted ? (
