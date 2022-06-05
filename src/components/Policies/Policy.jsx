@@ -63,6 +63,7 @@ const Policy = () => {
       {
         Header: "Property",
         accessor: "input_property",
+        width: "50%",
         Cell: (props) => {
           if (typeof props.value !== "undefined") {
             let value = props.value.replace("_", " ");
@@ -73,6 +74,7 @@ const Policy = () => {
       {
         Header: "Value",
         accessor: "value",
+        width: "50%",
         Cell: (props) => {
           return typeof props.value === "object"
             ? props.value.join(", ")
@@ -88,6 +90,7 @@ const Policy = () => {
       {
         Header: "Loop variables",
         accessor: "datasource_loop_variables",
+        width: "50%",
         Cell: (props) => {
           return typeof props.value === "object"
             ? props.value.join(", ")
@@ -97,6 +100,7 @@ const Policy = () => {
       {
         Header: "Value",
         accessor: "data_input_properties",
+        width: "50%",
         Cell: (props) => {
           return typeof props.value === "object"
             ? props.value.join(", ")
