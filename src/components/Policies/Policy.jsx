@@ -26,7 +26,7 @@ const Policy = () => {
       .get(`policies/${params.name}`)
       .then((response) => {
         setPolicy({
-          name: response.data.name,
+          name: capitalizeFirst(response.data.name),
           rules: response.data.rules
         });
 
@@ -55,17 +55,29 @@ const Policy = () => {
 
   useEffect(() => {
     retrievePolicy();
+    document.title = `${policy.name} - Policy Editor`;
   }, [loading]);
 
   const columns = useMemo(
     () => [
       {
         Header: "Property",
-        accessor: "input_property"
+        accessor: "input_property",
+        Cell: (props) => {
+          if (typeof props.value !== "undefined") {
+            let value = props.value.replace("_", " ");
+            return capitalizeFirst(value);
+          }
+        }
       },
       {
         Header: "Value",
-        accessor: "value"
+        accessor: "value",
+        Cell: (props) => {
+          return typeof props.value === "object"
+            ? props.value.join(", ")
+            : props.value;
+        }
       }
     ],
     []
@@ -75,11 +87,21 @@ const Policy = () => {
     () => [
       {
         Header: "Loop variables",
-        accessor: "datasource_loop_variables"
+        accessor: "datasource_loop_variables",
+        Cell: (props) => {
+          return typeof props.value === "object"
+            ? props.value.join(", ")
+            : props.value;
+        }
       },
       {
         Header: "Value",
-        accessor: "data_input_properties"
+        accessor: "data_input_properties",
+        Cell: (props) => {
+          return typeof props.value === "object"
+            ? props.value.join(", ")
+            : props.value;
+        }
       }
     ],
     []
@@ -88,15 +110,15 @@ const Policy = () => {
   if (loading) {
     return (
       <Stack p={"8"}>
-        <Skeleton height="20px" />
-        <Skeleton height="20px" />
-        <Skeleton height="20px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
+        <Skeleton height="40px" />
       </Stack>
     );
   } else {
     return (
-      <Stack p={"8"}>
-        <Heading as="h2"> {capitalizeFirst(policy.name)} </Heading>
+      <Stack p={"12"}>
+        <Heading as="h2"> {policy.name} </Heading>
         <Divider />
 
         {ruleProperties.map((d, idx) => (
