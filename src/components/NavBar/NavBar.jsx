@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { Link } from "react-router-dom";
 
 export default function Nav() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -15,7 +16,9 @@ export default function Nav() {
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          <Box>Policy Editor</Box>
+          <Box>
+            <Link to="/">Policy Editor</Link>
+          </Box>
 
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={7}>
