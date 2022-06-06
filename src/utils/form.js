@@ -1,27 +1,8 @@
-const cleanStrings = (string) => {
-  string = string.split(",").map((value) => {
-    return value.trim();
-  });
-  return string;
-};
+export const convert = (rules) => {
+  let result = [];
 
-const convert = (rules) => {
-  const result = [];
-  let commands = [];
-
-  rules.forEach((rule) => {
-    for (const val in rule) {
-      if (!val.startsWith("data")) {
-        let new_command = {
-          command: "input_prop_equals",
-          properties: {
-            input_property: val,
-            value: rule[val]
-          }
-        };
-        commands.push(new_command);
-      }
-    }
+  rules.map((rule, idx) => {
+    let commands = [];
     const filtered = Object.fromEntries(
       Object.entries(rule).filter(([key]) => key.includes("data"))
     );
@@ -33,29 +14,24 @@ const convert = (rules) => {
       };
       commands.push(blank);
     }
-    result.push(commands);
-  });
-  return result;
-};
 
-export const cleanRulesData = (rules) => {
-  rules.forEach((data) => {
-    Object.keys(data).forEach((key) => {
-      if (data[key] === "") {
-        delete data[key];
+    for (let val in rule) {
+      let new_command = {}
+      if (!val.startsWith("data")) {
+        new_command["command"] = "input_prop_equals"
+        new_command["properties"] = {
+          input_property: val,
+          value: rule[val]
+        }
       }
-    });
+      if (Object.keys(new_command).length !== 0) {
+        commands.push(new_command)
+      }
+    };
 
-    if ("datasource_name" in data) {
-      data.data_input_properties = cleanStrings(data.data_input_properties);
-      data.datasource_loop_variables = cleanStrings(
-        data.datasource_loop_variables
-      );
-    }
-    if (data.request_path) {
-      data.request_path = data.request_path.split("/");
-    }
-  });
-  const conv = convert(rules);
-  return conv;
+
+    result.push(commands)
+  })
+
+  return result
 };

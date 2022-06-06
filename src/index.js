@@ -27,7 +27,7 @@ root.render(
         <NavBar />
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path=":name" element={<Policy />} />
+          <Route path="/policy/:name" element={<Policy />} />
           <Route path="/login" element={<GitHubAuth />} />
         </Routes>
       </BrowserRouter>
