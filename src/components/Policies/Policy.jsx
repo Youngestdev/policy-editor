@@ -29,7 +29,7 @@ const Policy = () => {
           name: capitalizeFirst(response.data.name),
           rules: response.data.rules
         });
-
+        // TODO: Refactor this.
         policy.rules.map((rule) => {
           let temp = [];
           for (let prop in rule) {
