@@ -1,4 +1,5 @@
 // https://levelup.gitconnected.com/how-to-implement-login-with-github-in-a-react-app-bd3d704c64fc
+// https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect
 
 import LoginGithub from "react-login-github";
 import React from "react";
