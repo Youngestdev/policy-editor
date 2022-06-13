@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar/NavBar";
 import PolicyForm from "./components/Policies/Form";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Policy from "./components/Policies/Policy";
+import GitHubAuth from "./components/Authentication/GitHub";
 
 function App() {
   return (
@@ -26,7 +27,8 @@ root.render(
         <NavBar />
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path=":name" element={<Policy />} />
+          <Route path="/policy/:name" element={<Policy />} />
+          <Route path="/login" element={<GitHubAuth />} />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>

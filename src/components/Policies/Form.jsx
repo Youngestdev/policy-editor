@@ -16,7 +16,7 @@ import {
 import { useUpdateEffect } from "../../utils/hooks";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { cleanRulesData } from "../../utils/form";
+import { convert } from "../../utils/form";
 import request from "../../utils/request";
 
 const PolicyForm = () => {
@@ -27,7 +27,7 @@ const PolicyForm = () => {
   const numOfRules = watch("numOfRules");
 
   useUpdateEffect(() => {
-    const newVal = parseInt(numOfRules || 0, 10);
+    const newVal = parseInt(numOfRules || 0);
     const oldVal = fields.length;
 
     if (newVal > oldVal) {
@@ -49,16 +49,15 @@ const PolicyForm = () => {
   }, [numOfRules]);
 
   const onSubmit = (formData) => {
-    const cleanedRrules = cleanRulesData(formData.rules);
     const requestBody = {
       name: formData.name,
-      rules: cleanedRrules
+      rules: convert(formData.rules)
     };
-
+    
     request
       .post("policies", requestBody)
       .then((response) => {
-        navigate(`/${formData.name}`);
+        navigate(`/policy/${formData.name}`);
       })
       .catch((error) => {
         console.log(error);
@@ -81,6 +80,7 @@ const PolicyForm = () => {
             <Heading as="h3"> Add Rules </Heading>
             <Divider />
             <Select
+              name="numOfRules"
               placeholder="How many rules will you like to add?"
               {...register("numOfRules")}
             >
@@ -96,7 +96,9 @@ const PolicyForm = () => {
                 <br />
                 <FormControl>
                   <FormLabel htmlFor="request_path">Request Path</FormLabel>
-                  <Input
+                  <Input 
+                    name={`rules[${index}]request_path`}
+                    key={rule.id}
                     placeholder="v1/collections/obs"
                     {...register(`rules.${index}.request_path`)}
                   />
@@ -107,7 +109,9 @@ const PolicyForm = () => {
                 </FormControl>
                 <FormControl>
                   <FormLabel htmlFor="company">Company</FormLabel>
-                  <Input
+                  <Input 
+                    name={`rules[${index}]company`}
+                    key={rule.id}
                     placeholder="geobeyond"
                     {...register(`rules.${index}.company`)}
                   />
@@ -150,7 +154,9 @@ const PolicyForm = () => {
                 <br />
                 {/* <FormControl>
                   <FormLabel htmlFor="full_access">Allow full access</FormLabel>
-                  <Input
+                  <Input 
+                    name={`rules[${index}]full_access`}
+                    key={rule.id}
                     placeholder="groupname"
                     {...register(`rules.${index}.groupname`)}
                   />
@@ -163,7 +169,9 @@ const PolicyForm = () => {
                   <FormLabel htmlFor="datasource_name">
                     Datasource name
                   </FormLabel>
-                  <Input
+                  <Input 
+                    name={`rules[${index}]datasource_name`}
+                    key={rule.id}
                     placeholder="items"
                     {...register(`rules.${index}.datasource_name`)}
                   />
@@ -172,7 +180,9 @@ const PolicyForm = () => {
                   <FormLabel htmlFor="datasource_loop_variables">
                     Datasource variables
                   </FormLabel>
-                  <Input
+                  <Input 
+                    name={`rules[${index}]datasource_loop_variables`}
+                    key={rule.id}
                     placeholder="username, company"
                     {...register(`rules.${index}.datasource_loop_variables`)}
                   />
@@ -185,7 +195,9 @@ const PolicyForm = () => {
                   <FormLabel htmlFor="data_input_properties">
                     Datasource variable properties
                   </FormLabel>
-                  <Input
+                  <Input 
+                    name={`rules[${index}]data_input_properties`}
+                    key={rule.id}
                     placeholder="youngestdev, geobeyond"
                     {...register(`rules.${index}.data_input_properties`)}
                   />
