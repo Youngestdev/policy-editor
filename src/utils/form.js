@@ -35,3 +35,16 @@ export const convert = (rules) => {
 
   return result
 };
+
+export const extract_properties_from_rules = rules => {
+  let result = []
+  rules.map((rule) => {
+    let temp = [];
+    for (let prop in rule) {
+      temp.push(rule[prop]["properties"])
+    }
+
+    result.push(temp)
+  })
+  return result;
+}

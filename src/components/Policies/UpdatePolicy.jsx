@@ -1,6 +1,8 @@
-import { FormControl, FormLabel, Heading, Input } from "@chakra-ui/react";
+import { FormControl, FormLabel, Heading, Input, Stack } from "@chakra-ui/react";
 import { useEffect, useState } from 'react';
+import { useFieldArray, useForm } from "react-hook-form";
 import { useParams } from 'react-router';
+import { extract_properties_from_rules } from "../../utils/form";
 import request from "../../utils/request";
 
 const UpdatePolicy = () => {
@@ -8,18 +10,21 @@ const UpdatePolicy = () => {
         name: "",
         rules: [],
     });
+
     let params = useParams()
+
+    const { control, handleSubmit, register, watch } = useForm();
+    const { fields, append, remove } = useFieldArray({ name: "rules", control });
 
     useEffect(() => {
         // retrieve all the policies from the endpoint
         // and set the state to the policies
         request.get(`policies/${params.name}`)
-        .then((response) => {
+        .then((response) => {   
             setPolicy({
                 name: response.data.name,
-                rules: [...response.data.rules],
+                rules: extract_properties_from_rules(response.data.rules),
             });
-            console.log(policy)
         }).catch((error) => {
             console.log(error);
         }
@@ -28,7 +33,8 @@ const UpdatePolicy = () => {
 
     return (
         <>
-            <Heading as="h2">Update Policy - { policy.name } </Heading>
+            <Heading as="h2">Update Policy - { policy.name }</Heading>        
+            { policy.rules.map((rule) => JSON.stringify(rule)) }    
         </>
     )
 }

@@ -1,6 +1,7 @@
 import { Divider, Heading, Skeleton, Stack } from "@chakra-ui/react";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
+import { extract_properties_from_rules } from "../../utils/form";
 import request from "../../utils/request";
 import RenderTable from "../Table/RenderTable";
 
@@ -30,14 +31,7 @@ const Policy = () => {
           rules: response.data.rules
         });
         // TODO: Refactor this.
-        policy.rules.map((rule) => {
-          let temp = [];
-          for (let prop in rule) {
-            temp.push(rule[prop]["properties"]);
-          }
-
-          ruleProperties.push(temp);
-        });
+        ruleProperties = extract_properties_from_rules(response.data.rules);
 
         ruleProperties.forEach((rule) => {
           rule.forEach((r) => {
