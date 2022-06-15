@@ -13,13 +13,25 @@ import {
   Select,
   Stack
 } from "@chakra-ui/react";
+import { useContext } from "react";
+import { Navigate } from "react-router-dom";
+
 import { useUpdateEffect } from "../../utils/hooks";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { convert } from "../../utils/form";
 import request from "../../utils/request";
 
+import { AuthContext } from "../../index";
+
 const PolicyForm = () => {
+  const { state, dispatch } = useContext(AuthContext);
+
+  // redirect to login if isLoggedIn is false
+  if (!state.isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
+
   const { control, handleSubmit, register, watch } = useForm();
   const { fields, append, remove } = useFieldArray({ name: "rules", control });
   let navigate = useNavigate();
@@ -54,8 +66,9 @@ const PolicyForm = () => {
       rules: convert(formData.rules)
     };
     
+    // Add spinner to replace idle state after button click
     request
-      .post("policies", requestBody)
+      .post("policies/", requestBody)
       .then((response) => {
         navigate(`/policy/${formData.name}`);
       })

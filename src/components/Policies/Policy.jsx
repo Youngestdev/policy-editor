@@ -1,7 +1,6 @@
-import { Divider, Heading, Skeleton, Stack } from "@chakra-ui/react";
+import { Button, Divider, Flex, Heading, Skeleton, Stack } from "@chakra-ui/react";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
-import { extract_properties_from_rules } from "../../utils/form";
 import request from "../../utils/request";
 import RenderTable from "../Table/RenderTable";
 
@@ -31,7 +30,15 @@ const Policy = () => {
           rules: response.data.rules
         });
         // TODO: Refactor this.
-        ruleProperties = extract_properties_from_rules(response.data.rules);
+
+        policy.rules.map((rule) => {
+          let temp = [];
+          for (let prop in rule) {
+            temp.push(rule[prop]["properties"]);
+          }
+
+          ruleProperties.push(temp);
+        });
 
         ruleProperties.forEach((rule) => {
           rule.forEach((r) => {
@@ -112,7 +119,14 @@ const Policy = () => {
   } else {
     return (
       <Stack p={"12"}>
-        <Heading as="h2"> {policy.name} </Heading>
+        <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
+          <Heading as="h2"> {policy.name} </Heading>
+          {/* TODO: Implement onclick actions for the buttons below. */}
+          <Stack direction={"row"} spacing={3}>
+            <Button>Update</Button>
+            <Button>Delete</Button>
+          </Stack>
+        </Flex>
         <Divider />
 
         {ruleProperties.map((d, idx) => (
