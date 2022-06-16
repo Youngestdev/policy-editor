@@ -6,12 +6,11 @@ import PolicyForm from "./components/Policies/Form";
 import UpdatePolicy from "./components/Policies/UpdatePolicy";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Policy from "./components/Policies/Policy";
+import Policies from "./components/Policies/Policies";
 import GitHubAuth from "./components/Authentication/GitHub";
 import { reducer, initialState } from "./utils/reducer";
 
 export const AuthContext = React.createContext();
-
-// TODO: Clean up function.
 
 function Home() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
@@ -31,6 +30,7 @@ function Home() {
             <Route path="/policy/:name" element={<Policy />} />
             <Route path="/policy/:name/edit" element={<UpdatePolicy />} />
             <Route path="/login" element={<GitHubAuth />} />
+            <Route path="/policies" element={<Policies />} />
           </Routes>
         </BrowserRouter>
       </ChakraProvider>

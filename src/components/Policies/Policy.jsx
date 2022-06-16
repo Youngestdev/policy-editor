@@ -1,6 +1,6 @@
-import { Button, Divider, Flex, Heading, Skeleton, Stack } from "@chakra-ui/react";
+import { Button, Divider, Flex, Heading, Skeleton, Stack, useToast } from "@chakra-ui/react";
 import { memo, useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import request from "../../utils/request";
 import RenderTable from "../Table/RenderTable";
 
@@ -13,9 +13,26 @@ const Policy = () => {
   });
   const [loading, setLoading] = useState(true);
 
+  const toast = useToast();
+  
+  let navigate = useNavigate();
   let params = useParams();
   let ruleProperties = useMemo(() => [], []);
   let dataSourceProperties = useMemo(() => [], []);
+
+  const deletePolicy = () => {
+    request.delete(`/policies/${params.name}`).then(res => {
+      toast({
+        title: "Policy deleted",
+        description: "Policy deleted successfully",
+        status: "success",
+        duration: 9000,
+        isClosable: true
+      });
+      navigate("/policies");      
+    }
+    );
+  }
 
   const capitalizeFirst = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -29,7 +46,6 @@ const Policy = () => {
           name: capitalizeFirst(response.data.name),
           rules: response.data.rules
         });
-        // TODO: Refactor this.
 
         policy.rules.map((rule) => {
           let temp = [];
@@ -121,10 +137,9 @@ const Policy = () => {
       <Stack p={"12"}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <Heading as="h2"> {policy.name} </Heading>
-          {/* TODO: Implement onclick actions for the buttons below. */}
           <Stack direction={"row"} spacing={3}>
             <Button>Update</Button>
-            <Button>Delete</Button>
+            <Button onClick={deletePolicy} >Delete</Button>
           </Stack>
         </Flex>
         <Divider />

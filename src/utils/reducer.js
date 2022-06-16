@@ -1,6 +1,6 @@
 export const initialState = {
     // user: JSON.parse(localStorage.getItem('user')) || null,
-    access_token: JSON.parse(localStorage.getItem('access_token')) || null,
+    access_token: localStorage.getItem('access_token') || null,
     isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false,
 }
 
@@ -9,7 +9,7 @@ export const reducer = (state, action) => {
         case 'LOGIN':
             // set the user and access_token to the localstorage
             localStorage.setItem('user', JSON.stringify(action.payload.user));
-            localStorage.setItem('access_token', JSON.stringify(action.payload.access_token));
+            localStorage.setItem('access_token', action.payload.access_token);
             localStorage.setItem('isLoggedIn', true);          
         return {
             ...state,

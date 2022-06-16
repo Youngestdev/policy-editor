@@ -7,6 +7,7 @@ import { Navigate } from "react-router-dom";
 
 import { AuthContext } from "../../index";
 import request from "../../utils/request";
+import { Center } from "@chakra-ui/react";
 
 let client_id = process.env.REACT_APP_CLIENT_ID
 
@@ -19,7 +20,10 @@ const GitHubAuth = () => {
         console.log(
             "code: ", code
         )
-        request.get(`/token?code=${code}`)
+        request.get(`/token?code=${code}`, {params: {
+            client_id: client_id,
+            client_secret: process.env.REACT_APP_CLIENT_SECRET
+        }})
             .then(res => {
                 // dispatch result to the store
                 dispatch({
@@ -41,11 +45,13 @@ const GitHubAuth = () => {
         }
 
     return (
-        <LoginGithub
-            clientId={client_id}
-            onSuccess={onSuccess}
-            onFailure={onFailure}
-        />
+        <Center>
+            <LoginGithub
+                clientId={client_id}
+                onSuccess={onSuccess}
+                onFailure={onFailure}
+            />
+        </Center>
     )
 }
 

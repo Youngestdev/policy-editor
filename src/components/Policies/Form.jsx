@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Checkbox,
   Divider,
   FormControl,
@@ -11,9 +12,11 @@ import {
   Radio,
   RadioGroup,
   Select,
-  Stack
+  Spinner,
+  Stack,
+  useToast
 } from "@chakra-ui/react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 import { useUpdateEffect } from "../../utils/hooks";
@@ -32,9 +35,11 @@ const PolicyForm = () => {
     return <Navigate to="/login" />;
   }
 
+  const [loading, setLoading] = useState(false)
   const { control, handleSubmit, register, watch } = useForm();
   const { fields, append, remove } = useFieldArray({ name: "rules", control });
   let navigate = useNavigate();
+  const toast = useToast();
 
   const numOfRules = watch("numOfRules");
 
@@ -58,9 +63,10 @@ const PolicyForm = () => {
         remove(idx - 1);
       }
     }
-  }, [numOfRules]);
+  }, [numOfRules, loading]);
 
   const onSubmit = (formData) => {
+    setLoading(true);
     const requestBody = {
       name: formData.name,
       rules: convert(formData.rules)
@@ -73,11 +79,25 @@ const PolicyForm = () => {
         navigate(`/policy/${formData.name}`);
       })
       .catch((error) => {
-        console.log(error);
+        setLoading(false);
+        if (error.response.status == 409) {
+          toast({
+            title: 'Policy exists.',
+            description: "You a;ready have a policy with this name.",
+            status: 'error',
+            duration: 9000,
+            isClosable: true,
+          })``
+        }
       });
   };
 
-  return (
+  return loading ?
+  <Center>  
+     <Spinner size='xl' /> 
+  </Center> 
+     :      
+   (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box p={8}>
