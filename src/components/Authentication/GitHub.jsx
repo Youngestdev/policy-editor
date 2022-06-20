@@ -17,9 +17,6 @@ const GitHubAuth = () => {
     const onSuccess = response => {
         // store the code from the response object into a variable and send a request with the code as the body
         const code = response.code;
-        console.log(
-            "code: ", code
-        )
         request.get(`/token?code=${code}`, {params: {
             client_id: client_id,
             client_secret: process.env.REACT_APP_CLIENT_SECRET
