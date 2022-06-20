@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import * as ReactDOMClient from "react-dom/client";
 import { Box, ChakraProvider } from "@chakra-ui/react";
 import NavBar from "./components/NavBar/NavBar";
@@ -14,6 +14,18 @@ export const AuthContext = React.createContext();
 
 function Home() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
+
+  // if loggedInTime in the state value is less than 8 hours from now, then logout
+  useEffect(() => {
+    if (state.loggedInTime) {
+      const diff = new Date().getTime() - new Date(state.loggedInTime).getTime();
+      if (diff > 8 * 60 * 60 * 1000) {
+        dispatch({ type: "LOGOUT" });
+      }
+    }
+  }
+  , [state.loggedInTime]);
+
   return (
     <React.StrictMode>
       <AuthContext.Provider
@@ -26,10 +38,11 @@ function Home() {
         <BrowserRouter>
           <NavBar />
           <Routes>
-            <Route path="/" element={<App />} />
+            <Route path="/policy/new" element={<PolicyForm />} />
             <Route path="/policy/:name" element={<Policy />} />
             <Route path="/policy/:name/edit" element={<UpdatePolicy />} />
             <Route path="/login" element={<GitHubAuth />} />
+            <Route path="/" element={<Policies />} />
             <Route path="/policies" element={<Policies />} />
           </Routes>
         </BrowserRouter>
@@ -37,15 +50,6 @@ function Home() {
     </AuthContext.Provider>
   </React.StrictMode>
   )
-}
-
-function App() {
-
-  return (
-      <Box p={4}>
-        <PolicyForm />
-      </Box>
-  );
 }
 
 const rootElement = document.getElementById("root");
