@@ -1,6 +1,5 @@
-import { chakra, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useSortBy, useTable } from "react-table";
-import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 
 const RenderTable = ({ columns, data }) => {
   const {
@@ -18,15 +17,6 @@ const RenderTable = ({ columns, data }) => {
             {headerGroup.headers.map((column) => (
               <Th {...column.getHeaderProps(column.getSortByToggleProps())}>
                 {column.render("Header")}
-                <chakra.span pl="4">
-                  {column.isSorted ? (
-                    column.isSortedDesc ? (
-                      <TriangleDownIcon aria-label="sorted descending" />
-                    ) : (
-                      <TriangleUpIcon aria-label="sorted ascending" />
-                    )
-                  ) : null}
-                </chakra.span>
               </Th>
             ))}
           </Tr>
@@ -38,7 +28,7 @@ const RenderTable = ({ columns, data }) => {
           return (
             <Tr {...row.getRowProps()}>
               {row.cells.map((cell) => (
-                <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
+                  <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
               ))}
             </Tr>
           );
