@@ -83,7 +83,7 @@ const PolicyForm = () => {
         if (error.response.status == 409) {
           toast({
             title: 'Policy exists.',
-            description: "You a;ready have a policy with this name.",
+            description: "You already have a policy with this name.",
             status: 'error',
             duration: 9000,
             isClosable: true,
