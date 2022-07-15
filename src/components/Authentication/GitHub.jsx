@@ -1,6 +1,3 @@
-// https://levelup.gitconnected.com/how-to-implement-login-with-github-in-a-react-app-bd3d704c64fc
-// https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect
-
 import LoginGithub from "react-login-github";
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
@@ -12,7 +9,7 @@ import { Center } from "@chakra-ui/react";
 let client_id = process.env.REACT_APP_CLIENT_ID
 
 const GitHubAuth = () => {
-    const { state, dispatch } = useContext(AuthContext);    
+    const { state, dispatch } = useContext(AuthContext); 
     
     const onSuccess = response => {
         // store the code from the response object into a variable and send a request with the code as the body
