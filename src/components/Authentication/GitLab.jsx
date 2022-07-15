@@ -20,7 +20,7 @@ const GitLabAuth = () => {
         client_id: process.env.REACT_APP_GITLAB_APP_ID,
         redirect_uri: "https://youngestdev-policy-editor-6w5wxpvj35qrq-8080.githubpreview.dev",
         response_type: "code",
-        scopes: "read_user+read_repository+write_repository+profile"
+        scope: "write_repository"
       }
     }).then(response => console.log(response.data))
   }
