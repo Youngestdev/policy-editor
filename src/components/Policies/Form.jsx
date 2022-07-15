@@ -213,13 +213,8 @@ const PolicyForm = () => {
                     {...register(`rules.${index}.groupname`)}
                   />
                 </FormControl> */}
-<<<<<<< HEAD
-                <br />
-                </section>
-=======
                 {/* TODO: Retrieve the list of database from the backend once it has been implemented.s */}                
               </section>
->>>>>>> 487dcb3 ([feat] Implement GitLab Auth.)
             ))}
               <Divider />
               <Heading as="h4"> Save to repository: </Heading>

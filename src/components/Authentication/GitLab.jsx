@@ -18,11 +18,12 @@ const GitLabAuth = () => {
     axios.get(GITLAB_URL, {
       params: {
         client_id: process.env.REACT_APP_GITLAB_APP_ID,
-        redirect_uri: "https://youngestdev-policy-editor-6w5wxpvj35qrq-8080.githubpreview.dev",
+        redirect_uri: "https://app-8080-youngestdev.cloud.okteto.net/",
         response_type: "code",
         scope: "write_repository"
       }
     }).then(response => console.log(response.data))
+      .catch(err => console.log(err))
   }
 
   return (
