@@ -35,7 +35,9 @@ const PolicyForm = () => {
     return <Navigate to="/login" />;
   }
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [repos, setRepos] = useState([]);
+
   const { control, handleSubmit, register, watch } = useForm();
   const { fields, append, remove } = useFieldArray({ name: "rules", control });
   let navigate = useNavigate();
@@ -44,6 +46,22 @@ const PolicyForm = () => {
   const numOfRules = watch("numOfRules");
 
   useUpdateEffect(() => {
+
+    // retrieve the repo list from /user/repo and store them in a repos array state.
+    request
+      .get("/user/repos", {params: {
+        client_id: process.env.REACT_APP_CLIENT_ID,
+        client_secret: process.env.REACT_APP_CLIENT_SECRET
+    }})
+      .then((response) => {
+        setRepos(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+
+    // handle number of rules.
+
     const newVal = parseInt(numOfRules || 0);
     const oldVal = fields.length;
 
@@ -69,7 +87,8 @@ const PolicyForm = () => {
     setLoading(true);
     const requestBody = {
       name: formData.name,
-      rules: convert(formData.rules)
+      rules: convert(formData.rules),
+      github_repo_url: formData.repo
     };
     
     // Add spinner to replace idle state after button click
@@ -195,53 +214,22 @@ const PolicyForm = () => {
                   />
                 </FormControl> */}
                 <br />
-                <Heading as="h4">Create local variables</Heading>
-                <Divider />
-                <br />
-                <FormControl>
-                  <FormLabel htmlFor="datasource_name">
-                    Datasource name
-                  </FormLabel>
-                  <Input 
-                    name={`rules[${index}]datasource_name`}
-                    key={rule.id}
-                    placeholder="items"
-                    {...register(`rules.${index}.datasource_name`)}
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel htmlFor="datasource_loop_variables">
-                    Datasource variables
-                  </FormLabel>
-                  <Input 
-                    name={`rules[${index}]datasource_loop_variables`}
-                    key={rule.id}
-                    placeholder="username, company"
-                    {...register(`rules.${index}.datasource_loop_variables`)}
-                  />
-                  <FormHelperText>
-                    {" "}
-                    Seperate variables with a comma (,){" "}
-                  </FormHelperText>
-                </FormControl>
-                <FormControl>
-                  <FormLabel htmlFor="data_input_properties">
-                    Datasource variable properties
-                  </FormLabel>
-                  <Input 
-                    name={`rules[${index}]data_input_properties`}
-                    key={rule.id}
-                    placeholder="youngestdev, geobeyond"
-                    {...register(`rules.${index}.data_input_properties`)}
-                  />
-                  <FormHelperText>
-                    {" "}
-                    Seperate properties with a comma (,){" "}
-                  </FormHelperText>
-                </FormControl>
-              </section>
+                </section>
             ))}
-            <Divider />
+              <Divider />
+              <Heading as="h4"> Save to repository: </Heading>
+              <Select
+              name="repo"
+              placeholder="Select a repo to store policy"
+              {...register("repo")}
+            >
+              {repos.map((name, idx) => (
+                <option key={idx} value={name.html_url}>
+                  {name.name}{" "}
+                </option>
+              ))}
+            </Select>
+              <Divider />
             <FormControl>
               <Button mt={4} colorScheme="teal" type="submit">
                 Create policy

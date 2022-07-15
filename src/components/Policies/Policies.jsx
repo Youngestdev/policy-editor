@@ -31,8 +31,19 @@ const Policies = () => {
             }
         },
         {
-            Header: "Owner  ",
+            Header: "Owner",
             accessor: "owner"            
+        },
+        {
+            Header: "Repository",
+            accessor: "github_repo_url",
+            Cell: (props) => {
+                return (
+                    <Link href={props.value}>
+                        View Repository <ExternalLinkIcon mx='2px' />
+                    </Link>
+                )
+            }
         }
     ], []);
 

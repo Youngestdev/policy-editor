@@ -31,7 +31,7 @@ const GitHubAuth = () => {
             )
             .catch(err => {
                 console.log(err);
-            });        
+            });
         }
         const onFailure = response => console.error(response);    
 
