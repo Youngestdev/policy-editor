@@ -9,8 +9,9 @@ import Policy from "./components/Policies/Policy";
 import Policies from "./components/Policies/Policies";
 import GitHubAuth from "./components/Authentication/GitHub";
 import { reducer, initialState } from "./utils/reducer";
-import GitLabAuthentication from "./components/Authentication/GitLab";
+import GitLabAuthentication, { HandleAccessToken } from "./components/Authentication/GitLab";
 import Auth from "./components/Authentication";
+import GitLabAuth from "./components/Authentication/GitLab";
 
 export const AuthContext = React.createContext();
 
@@ -44,8 +45,9 @@ function Home() {
             <Route path="/policy/:name" element={<Policy />} />
             <Route path="/policy/:name/edit" element={<UpdatePolicy />} />
             <Route path="/login" element={<Auth />} />
-            <Route path="/" element={<Policies />} />
             <Route path="/policies" element={<Policies />} />
+            <Route path="/policies" element={<Policies />} />
+            <Route path="*" element={<HandleAccessToken />} />
           </Routes>
         </BrowserRouter>
       </ChakraProvider>
