@@ -46,7 +46,6 @@ function Home() {
             <Route path="/policy/:name/edit" element={<UpdatePolicy />} />
             <Route path="/login" element={<Auth />} />
             <Route path="/policies" element={<Policies />} />
-            <Route path="/policies" element={<Policies />} />
             <Route path="*" element={<HandleAccessToken />} />
           </Routes>
         </BrowserRouter>
