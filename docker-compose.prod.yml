@@ -1,0 +1,10 @@
+version: "3.3"
+services:
+  app:
+    build: .
+    ports:
+      - "8081:8081"
+    environment:
+      - REACT_APP_CLIENT_ID=${REACT_APP_CLIENT_ID}
+      - REACT_APP_CLIENT_SECRET=${REACT_APP_CLIENT_SECRET}
+      - REACT_APP_GITLAB_REDIRECT_URI=${REACT_APP_GITLAB_REDIRECT_URI}
