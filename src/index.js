@@ -7,11 +7,8 @@ import UpdatePolicy from "./components/Policies/UpdatePolicy";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Policy from "./components/Policies/Policy";
 import Policies from "./components/Policies/Policies";
-import GitHubAuth from "./components/Authentication/GitHub";
 import { reducer, initialState } from "./utils/reducer";
-import GitLabAuthentication, { HandleAccessToken } from "./components/Authentication/GitLab";
 import Auth from "./components/Authentication";
-import GitLabAuth from "./components/Authentication/GitLab";
 
 export const AuthContext = React.createContext();
 
