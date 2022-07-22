@@ -5,7 +5,6 @@ import {
   Checkbox,
   Divider,
   FormControl,
-  FormHelperText,
   FormLabel,
   Heading,
   Input,
@@ -46,13 +45,26 @@ const PolicyForm = () => {
   const numOfRules = watch("numOfRules");
 
   useUpdateEffect(() => {
+    window.scrollTo(0, 0)
+    const gitProvider = localStorage.getItem("provider");
 
     // retrieve the repo list from /user/repo and store them in a repos array state.
-    request
-      .get("/user/repos", {params: {
-        client_id: process.env.REACT_APP_CLIENT_ID,
-        client_secret: process.env.REACT_APP_CLIENT_SECRET
-    }})
+    
+    // if the git provider retrieved from localstorage is gitlab, retrieve the repos from /user/repos/gitlab
+
+    if (gitProvider === "gitlab") {
+      request
+      .get("/user/repos/gitlab")
+      .then((response) => {
+        setRepos(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    } else {
+      // if the git provider retrieved from localstorage is github, retrieve the repos from /user/repos/github
+      request
+      .get("/user/repos/github")
       .then((response) => {
         setRepos(response.data);
       })
@@ -60,6 +72,7 @@ const PolicyForm = () => {
         console.log(err);
       })
 
+    }
     // handle number of rules.
 
     const newVal = parseInt(numOfRules || 0);
@@ -88,7 +101,7 @@ const PolicyForm = () => {
     const requestBody = {
       name: formData.name,
       rules: convert(formData.rules),
-      github_repo_url: formData.repo
+      repo_url: formData.repo
     };
     
     // Add spinner to replace idle state after button click

@@ -36,7 +36,7 @@ const Policies = () => {
         },
         {
             Header: "Repository",
-            accessor: "github_repo_url",
+            accessor: "repo_url",
             Cell: (props) => {
                 return (
                     <Link href={props.value}>
