@@ -14,7 +14,7 @@ const GitHubAuth = () => {
     const onSuccess = response => {
         // store the code from the response object into a variable and send a request with the code as the body
         const code = response.code;
-        request.get(`/token?code=${code}`, {params: {
+        request.get(`/github/token?code=${code}`, {params: {
             client_id: client_id,
             client_secret: process.env.REACT_APP_CLIENT_SECRET
         }})
@@ -23,6 +23,7 @@ const GitHubAuth = () => {
                 dispatch({
                     type: "LOGIN",
                     payload: res.data,
+                    provider: "github"
                 });
             }
             )
@@ -30,8 +31,7 @@ const GitHubAuth = () => {
                 console.log(err);
             });
         }
-        const onFailure = response => console.error(response);    
-
+        const onFailure = response => console.error(response);
     
         // navigate to / is the user is logged in
         if (state.isLoggedIn) {
