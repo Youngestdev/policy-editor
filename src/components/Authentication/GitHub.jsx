@@ -1,10 +1,11 @@
 import LoginGithub from "react-login-github";
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
+import { FaGithub } from "react-icons/fa";
 
 import { AuthContext } from "../../index";
 import request from "../../utils/request";
-import { Center } from "@chakra-ui/react";
+import { Center, Icon } from "@chakra-ui/react";
 
 let client_id = process.env.REACT_APP_CLIENT_ID
 
@@ -40,6 +41,7 @@ const GitHubAuth = () => {
 
     return (
         <Center>
+            <Icon as={FaGithub} />
             <LoginGithub
                 clientId={client_id}
                 onSuccess={onSuccess}

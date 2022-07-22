@@ -9,6 +9,7 @@ import Policy from "./components/Policies/Policy";
 import Policies from "./components/Policies/Policies";
 import { reducer, initialState } from "./utils/reducer";
 import Auth from "./components/Authentication";
+import { HandleAccessToken } from "./components/Authentication/GitLab";
 
 export const AuthContext = React.createContext();
 

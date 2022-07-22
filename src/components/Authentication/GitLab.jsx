@@ -1,4 +1,5 @@
-import { Center, Spinner, Link } from "@chakra-ui/react";
+import { Center, Spinner, Icon, Link } from "@chakra-ui/react";
+import { FaGitlab } from "react-icons/fa";
 import axios from "axios";
 import { useContext } from "react";
 import { Navigate } from "react-router";
@@ -16,9 +17,12 @@ const GitLabAuth = () => {
   }
 
   return (
-    <Link href={GITLAB_URL}>
-      Login with GitLab
-    </Link>    
+    <Center>
+      <Icon as={FaGitlab} />
+      <Link href={GITLAB_URL}>
+        Login with GitLab
+      </Link>    
+    </Center>
   )
 }
 
