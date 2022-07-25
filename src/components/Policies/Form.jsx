@@ -104,7 +104,7 @@ const PolicyForm = () => {
           datasource_name: "",
           datasource_loop_variables: "",
           data_input_properties: "",
-          allow_access: ""
+          allow_full_access: ""
         });
       }
     } else {
@@ -236,9 +236,9 @@ const PolicyForm = () => {
                     Datasource variables
                   </FormLabel>
                   <Select
-                    name="datasource_name"
+                    name={`rules[${index}]datasource_name`}
                     placeholder="Select a datasource"
-                    {...register("datasource_name")}
+                    {...register(`rules.${index}.datasource_name`)}
                   >         
                            {/* When we have database results with multiple names, this will be modified.  */}
                       <option value={data.name}>
@@ -251,9 +251,9 @@ const PolicyForm = () => {
                     Datasource variables
                   </FormLabel>
                   <Select
-                    name="datasource_loop_variables"
+                    name={`rules[${index}]datasource_loop_variables`}
                     placeholder="Select a datasource"
-                    {...register("datasource_loop_variables")}
+                    {...register(`rules.${index}.datasource_loop_variables`)}
                   >         
                            {/* When we have thought of managing all that queries, i'll fix this.  */}
                       <option value={data.name}>
@@ -264,9 +264,9 @@ const PolicyForm = () => {
                 <FormControl>
                   <FormLabel htmlFor="full_access">Allow full access</FormLabel>
                   <Select
-                    name="allow_full_access"
+                    name={`rules[${index}allow_full_access`}
                     placeholder="Select "
-                    {...register("allow_full_access")}
+                    {...register(`rules.${index}.allow_full_access`)}
                   >
                       <option value={data.data.groupname}>
                         {data.data.groupname}{" "}
