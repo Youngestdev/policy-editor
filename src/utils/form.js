@@ -18,18 +18,24 @@ export const convert = (rules) => {
     for (let val in rule) {
       let new_command = {}
       if (!val.startsWith("data")) {
-        new_command["command"] = "input_prop_equals"
-        new_command["properties"] = {
-          input_property: val,
-          value: rule[val]
+        if (val.startsWith("allow")) {
+          new_command.command = "allow_full_access";
+          new_command.properties = {
+            input_property: "groupname", // This is static at the moment.
+            value: rule[val]
+          };
+        } else {
+          new_command["command"] = "input_prop_equals"
+          new_command["properties"] = {
+            input_property: val,
+            value: rule[val]
+          }
         }
       }
       if (Object.keys(new_command).length !== 0) {
         commands.push(new_command)
       }
     };
-
-
     result.push(commands)
   })
 
