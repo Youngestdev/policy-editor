@@ -36,6 +36,10 @@ const PolicyForm = () => {
 
   const [loading, setLoading] = useState(false);
   const [repos, setRepos] = useState([]);
+  const [data, setData] = useState({
+    name: "",
+    data: []
+  });
 
   const { control, handleSubmit, register, watch } = useForm();
   const { fields, append, remove } = useFieldArray({ name: "rules", control });
@@ -45,7 +49,7 @@ const PolicyForm = () => {
   const numOfRules = watch("numOfRules");
 
   useUpdateEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
     const gitProvider = localStorage.getItem("provider");
 
     // retrieve the repo list from /user/repo and store them in a repos array state.
@@ -54,23 +58,36 @@ const PolicyForm = () => {
 
     if (gitProvider === "gitlab") {
       request
-      .get("/user/repos/gitlab")
-      .then((response) => {
-        setRepos(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
+        .get("/user/repos/gitlab")
+        .then((response) => {
+          setRepos(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
       })
     } else {
       // if the git provider retrieved from localstorage is github, retrieve the repos from /user/repos/github
       request
-      .get("/user/repos/github")
-      .then((response) => {
-        setRepos(response.data);
+        .get("/user/repos/github")
+        .then((response) => {
+          setRepos(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
       })
-      .catch((err) => {
-        console.log(err);
-      })
+
+      request
+        .get("/data")
+        .then((response) => {
+          let name = Object.keys(response.data)[0];
+          let data = Object.values(response.data)[0][0];
+          setData({ name, data });
+        }
+        )
+        .catch((err) => {
+          console.log(err);
+        }
+      );
 
     }
     // handle number of rules.
@@ -86,7 +103,8 @@ const PolicyForm = () => {
           request_method: "",
           datasource_name: "",
           datasource_loop_variables: "",
-          data_input_properties: ""
+          data_input_properties: "",
+          allow_access: ""
         });
       }
     } else {
@@ -142,7 +160,7 @@ const PolicyForm = () => {
               />
             </FormControl>
             <Divider />
-            <Heading as="h3"> Add Rules </Heading>
+            <Heading as="h3" size="md"> Add Rules </Heading>
             <Divider />
             <Select
               name="numOfRules"
@@ -156,8 +174,8 @@ const PolicyForm = () => {
               ))}
             </Select>
             {fields.map((rule, index) => (
-              <section key={index}>
-                <Heading as="h6"> Rule {index + 1} </Heading>
+              <Stack spacing={4} key={index}>
+                <Heading as="h4" size="sm"> Rule {index + 1} </Heading>
                 <br />
                 <FormControl>
                   <FormLabel htmlFor="request_path">Request Path</FormLabel>
@@ -167,10 +185,6 @@ const PolicyForm = () => {
                     placeholder="v1/collections/obs"
                     {...register(`rules.${index}.request_path`)}
                   />
-                  {/* <Checkbox {...register(`rules.${index}.split_path`)}>
-                    {" "}
-                    Split request path{" "}
-                  </Checkbox> */}
                 </FormControl>
                 <FormControl>
                   <FormLabel htmlFor="company">Company</FormLabel>
@@ -217,17 +231,49 @@ const PolicyForm = () => {
                   </RadioGroup>
                 </FormControl>
                 <br />
-                {/* <FormControl>
+                <FormControl>
+                  <FormLabel htmlFor="datasource_name">
+                    Datasource variables
+                  </FormLabel>
+                  <Select
+                    name="datasource_name"
+                    placeholder="Select a datasource"
+                    {...register("datasource_name")}
+                  >         
+                           {/* When we have database results with multiple names, this will be modified.  */}
+                      <option value={data.name}>
+                        {data.name}{" "}
+                      </option>
+                   </Select>
+                </FormControl>
+                <FormControl>
+                  <FormLabel htmlFor="datasource_loop_variables">
+                    Datasource variables
+                  </FormLabel>
+                  <Select
+                    name="datasource_loop_variables"
+                    placeholder="Select a datasource"
+                    {...register("datasource_loop_variables")}
+                  >         
+                           {/* When we have thought of managing all that queries, i'll fix this.  */}
+                      <option value={data.name}>
+                        {Object.values(data.data).join(", ")}{" "}
+                      </option>
+                   </Select>
+                </FormControl>
+                <FormControl>
                   <FormLabel htmlFor="full_access">Allow full access</FormLabel>
-                  <Input 
-                    name={`rules[${index}]full_access`}
-                    key={rule.id}
-                    placeholder="groupname"
-                    {...register(`rules.${index}.groupname`)}
-                  />
-                </FormControl> */}
-                {/* TODO: Retrieve the list of database from the backend once it has been implemented.s */}                
-              </section>
+                  <Select
+                    name="allow_full_access"
+                    placeholder="Select "
+                    {...register("allow_full_access")}
+                  >
+                      <option value={data.data.groupname}>
+                        {data.data.groupname}{" "}
+                      </option>
+                   </Select>
+                </FormControl>              
+              </Stack>            
             ))}
               <Divider />
               <Heading as="h4"> Save to repository: </Heading>
